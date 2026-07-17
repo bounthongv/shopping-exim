@@ -18,4 +18,5 @@ jobs:
           script: |
             cd /var/www/shopping-exim
             git pull origin master
+            bash /root/fix-shopping-config.sh
             docker compose -f docker-compose.shopping.yml up --build -d
