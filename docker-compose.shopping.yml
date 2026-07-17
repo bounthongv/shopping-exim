@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    container_name: shopping-app
+    restart: always
+    ports:
+      - "8081:80"
+    volumes:
+      - ./:/var/www/html
