@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "config.php";
 
 
@@ -18,7 +19,7 @@ if (isset($_SESSION['login_error'])) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ເຂົ້າສູ່ລະບົບ / Login</title>
+<title>Login</title>
 <!-- Google Fonts: Noto Sans Lao -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- Bootstrap Icons -->
@@ -46,7 +47,7 @@ if (isset($_SESSION['login_error'])) {
         overflow: hidden;
     }
     .login-header {
-        background: linear-gradient(135deg, #9fbbe9ff 0%, #8ca2dfff 100%);
+        background: linear-gradient(135deg, #7ea6e6ff 0%, #8ca2dfff 100%);
         padding: 40px 20px;
         text-align: center;
         position: relative;
@@ -123,7 +124,7 @@ if (isset($_SESSION['login_error'])) {
     }
     .input-group label {
         display: block;
-        font-size: 14px;
+        font-size: 16px;
         color: #4b5563;
         margin-bottom: 8px;
         font-weight: 600;
@@ -199,7 +200,7 @@ if (isset($_SESSION['login_error'])) {
         <?php endif; ?>
 
         <div class="input-group">
-            <label for="customer_id">ຊື່ຜູ້ໃຊ້ (Username)</label>
+            <label for="customer_id">ຊື່ຜູ້ໃຊ້ (Username) :</label>
             <div class="input-wrapper">
                 <i class="bi bi-person-fill"></i>
                 <input type="text" id="customer_id" name="customer_id" placeholder="ປ້ອນຊື່ຜູ້ໃຊ້" required autofocus>
@@ -207,16 +208,17 @@ if (isset($_SESSION['login_error'])) {
         </div>
 
         <div class="input-group">
-            <label for="password">ລະຫັດຜ່ານ (Password)</label>
+            <label for="password">ລະຫັດຜ່ານ (Password) :</label>
             <div class="input-wrapper">
                 <i class="bi bi-lock-fill"></i>
-                <input type="password" id="password" name="password" placeholder="ປ້ອນລະຫັດຜ່ານ" required>
+                <input type="password" id="password" name="password" placeholder="ປ້ອນລະຫັດຜ່ານ">
             </div>
+           
         </div>
 
 
         <div class="input-group" id="customer_name_group" style="display:none;">
-            <label for="customer_name">ຊື່ລູກຄ້າ/ຊື່ຮ້ານ</label>
+            <label for="customer_name">ຊື່ລູກຄ້າ/ຊື່ຮ້ານ :</label>
             <div class="input-wrapper">
                 <i class="bi bi-person-lines-fill"></i>
                 <input type="text" id="customer_name" name="customer_name" class="readonly" readonly tabindex="-1">
@@ -227,7 +229,7 @@ if (isset($_SESSION['login_error'])) {
         <input type="hidden" id="address" name="address">
 
         <button type="submit" class="btn-submit">
-            <i class="bi bi-box-arrow-in-right"></i> ເຂົ້າສູ່ລະບົບ
+             ເຂົ້າສູ່ລະບົບ
         </button>
     </form>
 </div>

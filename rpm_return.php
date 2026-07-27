@@ -171,28 +171,28 @@ if (!$shop) {
             <label>ຊ່ວງເວລາ</label>
             <select id="period_select" style="width: 100%; background-color: #fff; padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 8px;">
                 <option value="all">ທັງໝົດ</option>
-                <option value="custom">ເລືອກວັນທີ</option>
+                <option value="custom">ເລືອກວັນທີ :</option>
             </select>
         </div>
         <div class="filter-section" id="custom-date-section" style="margin-bottom: 0; flex: 2; display: none;">
             <div class="field">
-                <label>ເລີ່ມວັນທີ</label>
+                <label>ເລີ່ມວັນທີ :</label>
                 <input type="text" id="from_date" value="<?php echo date('Y-m-01'); ?>" readonly style="width: 100%; background-color: #fff;">
             </div>
             <div class="field">
-                <label>ຫາວັນທີ</label>
+                <label>ຫາວັນທີ :</label>
                 <input type="text" id="to_date" value="<?php echo date('Y-m-t'); ?>" readonly style="width: 100%; background-color: #fff;">
             </div>
         </div>
         
         <div class="field" style="flex: 1; margin-bottom: 0;">
-            <label class="desktop-only-label">ຄົ້ນຫາໃບສົ່ງ</label>
+            <label class="desktop-only-label">ຄົ້ນຫາໃບສົ່ງ :</label>
             <input type="text" id="search" placeholder="ຄົ້ນຫາເລກທີໃບສົ່ງ....">
         </div>
 
         <div class="action-row" style="flex: 1; margin-bottom: 0; align-items: flex-end;">
-            <button type="button" class="btn-primary" id="btn-search" style="margin-bottom: 0;">ຄົ້ນຫາ</button>
-            <button type="button" class="btn-secondary" id="btn-clear" style="margin-bottom: 0;">ລ้าง</button>
+            <button type="button" class="btn-primary" id="btn-search" style="margin-bottom: 0;"><i class="bi bi-search"></i> ຄົ້ນຫາ</button>
+            <button type="button" class="btn-secondary" id="btn-clear" style="margin-bottom: 0;"><i class="bi bi-x-circle"></i> ລ้าง</button>
         </div>
     </div>
 

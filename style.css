@@ -374,10 +374,11 @@ body {
 
 .item-row {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 4px;
     font-size: 13px;
     border-bottom: 1px solid #e2e8f0;
-    padding: 6px 0;
+    padding: 8px 0;
 }
 
 .item-row:last-child {
@@ -386,21 +387,26 @@ body {
 
 .item-name {
     color: #475569;
-    width: 60%;
+    line-height: 1.4;
+}
+
+.item-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
 }
 
 .item-qty {
     color: #0f172a;
     font-weight: 600;
-    width: 15%;
-    text-align: center;
 }
 
 .item-total {
     color: #0f172a;
     font-weight: 600;
-    width: 25%;
     text-align: right;
+    white-space: nowrap;
 }
 
 /* Top Nav */

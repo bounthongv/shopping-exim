@@ -168,31 +168,58 @@ if (!$shop) {
 
     <div class="filter-desktop-row">
         <div class="field" style="flex: 1; margin-bottom: 0;">
-            <label>ຊ່ວງເວລາ</label>
+            <label>ເລືອກສະແດງ :</label>
             <select id="period_select" style="width: 100%; background-color: #fff; padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 8px;">
+                <option value="custom" selected>ເລືອກວັນທີ :</option>
+                <option value="month">ເລືອກເດືອນ</option>
                 <option value="all">ທັງໝົດ</option>
-                <option value="custom">ເລືອກວັນທີ</option>
             </select>
         </div>
-        <div class="filter-section" id="custom-date-section" style="margin-bottom: 0; flex: 2; display: none;">
+        <div class="filter-section" id="custom-date-section" style="margin-bottom: 0; flex: 2; display: flex;">
             <div class="field">
-                <label>ເລີ່ມວັນທີ</label>
-                <input type="text" id="from_date" value="<?php echo date('Y-m-01'); ?>" readonly style="width: 100%; background-color: #fff;">
+                <label>ເລີ່ມວັນທີ :</label>
+                <input type="text" id="from_date" value="<?php echo date('Y-m-01'); ?>" readonly style="width: 50%; background-color: #fff;">
             </div>
             <div class="field">
-                <label>ຫາວັນທີ</label>
-                <input type="text" id="to_date" value="<?php echo date('Y-m-t'); ?>" readonly style="width: 100%; background-color: #fff;">
+                <label>ຫາວັນທີ :</label>
+                <input type="text" id="to_date" value="<?php echo date('Y-m-t'); ?>" readonly style="width: 50%; background-color: #fff;">
             </div>
         </div>
-        
+        <div class="filter-section" id="month-select-section" style="margin-bottom: 0; flex: 2; display: none;">
+            <div class="field">
+                <label>ເດືອນ</label>
+                <select id="month_picker" style="width: 100%; background-color: #fff; padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 8px;">
+                    <?php
+                    $lao_months = [1=>'ມັງກອນ',2=>'ກຸມພາ',3=>'ມີນາ',4=>'ເມສາ',5=>'ພຶດສະພາ',6=>'ມິຖຸນາ',7=>'ກໍລະກົດ',8=>'ສິງຫາ',9=>'ກັນຍາ',10=>'ຕຸລາ',11=>'ພະຈິກ',12=>'ທັນວາ'];
+                    $cur_month = (int)date('n');
+                    foreach ($lao_months as $m => $name) {
+                        $sel = ($m == $cur_month) ? 'selected' : '';
+                        echo "<option value=\"$m\" $sel>$name</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="field">
+                <label>ປີ</label>
+                <select id="year_picker" style="width: 100%; background-color: #fff; padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 8px;">
+                    <?php
+                    $cur_year = (int)date('Y');
+                    for ($y = $cur_year; $y >= $cur_year - 3; $y--) {
+                        echo "<option value=\"$y\">$y</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+        </div>
+
         <div class="field" style="flex: 1; margin-bottom: 0;">
-            <label class="desktop-only-label">ຄົ້ນຫາບິນ</label>
+            <label class="desktop-only-label">ຄົ້ນຫາບິນ :</label>
             <input type="text" id="search" placeholder="ຄົ້ນຫາເລກທີບິນ....">
         </div>
 
         <div class="action-row" style="flex: 1; margin-bottom: 0; align-items: flex-end;">
-            <button type="button" class="btn-primary" id="btn-search" style="margin-bottom: 0;">ຄົ້ນຫາ</button>
-            <button type="button" class="btn-secondary" id="btn-pdf" style="margin-bottom: 0;">ໂຫລດ PDF</button>
+            <button type="button" class="btn-primary" id="btn-search" style="margin-bottom: 0;"><i class="bi bi-search"></i> ຄົ້ນຫາ</button>
+            <button type="button" class="btn-secondary" id="btn-pdf" style="margin-bottom: 0;"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
         </div>
     </div>
 
@@ -204,6 +231,7 @@ if (!$shop) {
                     <th style="width: 50px; text-align: center;">ລ/ດ</th>
                     <th>ເລກທີ</th>
                     <th>ເລກທີສັ່ງຊື້</th>
+                    <th style="text-align: center;">ວັນທີ</th>
                     <th style="text-align: right;">ຈຳນວນ</th>
                     <th style="text-align: right;">ມູນຄ່າລວມ</th>
                     <th style="text-align: center;">ສະຖານະ</th>
@@ -227,15 +255,31 @@ if (!$shop) {
 document.addEventListener("DOMContentLoaded", function() {
     const periodSelect = document.getElementById('period_select');
     const customDateSection = document.getElementById('custom-date-section');
-    
-    periodSelect.addEventListener('change', function() {
-        if(this.value === 'custom') {
-            customDateSection.style.display = 'flex';
-        } else {
-            customDateSection.style.display = 'none';
-        }
+    const monthSelectSection = document.getElementById('month-select-section');
+
+    function applyMonthSelection() {
+        const month = document.getElementById('month_picker').value;
+        const year = document.getElementById('year_picker').value;
+        const mm = String(month).padStart(2, '0');
+        const lastDay = new Date(year, month, 0).getDate();
+        document.getElementById('from_date').value = `${year}-${mm}-01`;
+        document.getElementById('to_date').value = `${year}-${mm}-${String(lastDay).padStart(2, '0')}`;
         loadInvoices();
+    }
+
+    periodSelect.addEventListener('change', function() {
+        customDateSection.style.display = (this.value === 'custom') ? 'flex' : 'none';
+        monthSelectSection.style.display = (this.value === 'month') ? 'flex' : 'none';
+
+        if (this.value === 'month') {
+            applyMonthSelection();
+        } else {
+            loadInvoices();
+        }
     });
+
+    document.getElementById('month_picker').addEventListener('change', applyMonthSelection);
+    document.getElementById('year_picker').addEventListener('change', applyMonthSelection);
 
     flatpickr("#from_date", {
         dateFormat: "Y-m-d",
@@ -289,7 +333,7 @@ function loadInvoices() {
     const tbody = document.getElementById('invoice-tbody');
     
     mobileContainer.innerHTML = '<div class="empty-state">ກຳລັງໂຫຼດຂໍ້ມູນ...</div>';
-    tbody.innerHTML = '<tr><td colspan="8" class="empty-state" style="text-align: center; padding: 40px;">ກຳລັງໂຫຼດຂໍ້ມູນ...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-state" style="text-align: center; padding: 40px;">ກຳລັງໂຫຼດຂໍ້ມູນ...</td></tr>';
 
     const formData = new FormData();
     formData.append('action', 'list');
@@ -307,13 +351,22 @@ function loadInvoices() {
             renderInvoices(data.data);
         } else {
             mobileContainer.innerHTML = `<div class="error-msg">${data.message}</div>`;
-            tbody.innerHTML = `<tr><td colspan="8" class="error-msg">${data.message}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="9" class="error-msg">${data.message}</td></tr>`;
         }
     })
     .catch(error => {
         mobileContainer.innerHTML = `<div class="error-msg">ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຂໍ້ມູນ</div>`;
-        tbody.innerHTML = `<tr><td colspan="8" class="error-msg">ເກີດຂໍ້ຜິດພາດ</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" class="error-msg">ເກີດຂໍ້ຜິດພາດ</td></tr>`;
     });
+}
+
+// 2026-06-21 -> 21/06/2026 (ຮູບແບບດຽວກັບໜ້າ admin)
+function formatDate(d) {
+    if (!d) return '-';
+    const s = String(d).split(' ')[0];   // ຕັດເວລາອອກ ຖ້າມີຕິດມາ
+    const p = s.split('-');
+    if (p.length !== 3) return s;        // ຮູບແບບບໍ່ຄືທີ່ຄາດ → ສະແດງຄ່າດິບ
+    return `${p[2]}/${p[1]}/${p[0]}`;
 }
 
 function renderInvoices(invoices) {
@@ -325,7 +378,7 @@ function renderInvoices(invoices) {
     
     if(invoices.length === 0) {
         mobileContainer.innerHTML = '<div class="empty-state">ບໍ່ພົບຂໍ້ມູນ</div>';
-        tbody.innerHTML = '<tr><td colspan="8" class="empty-state" style="text-align: center; padding: 40px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" class="empty-state" style="text-align: center; padding: 40px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
         return;
     }
 
@@ -353,7 +406,7 @@ function renderInvoices(invoices) {
                         <span class="invoice-no">${inv.sale_id}</span>
                         ${inv.order_id ? `<br><span style="font-size: 13px; color: #666;">ເລກທີສັ່ງຊື້: ${inv.order_id}</span>` : ''}
                     </div>
-                    <div class="invoice-date">${inv.sale_date}</div>
+                    <div class="invoice-date">${formatDate(inv.sale_date)}</div>
                 </div>
                 <div class="invoice-body">
                     <div class="invoice-amt">₭ ${Number(inv.total_amt).toLocaleString()}</div>
@@ -375,13 +428,14 @@ function renderInvoices(invoices) {
                 <td style="text-align: center; color: #000;">${index + 1}</td>
                 <td style="color: #000; font-weight: 600;">${inv.sale_id}</td>
                 <td style="color: #000;">${inv.order_id || '-'}</td>
+                <td style="text-align: center; color: #000; white-space: nowrap;">${formatDate(inv.sale_date)}</td>
                 <td style="text-align: right; color: #000;">${Number(inv.total_qty).toLocaleString()}</td>
                 <td style="text-align: right; font-weight: 600; color: #000;">${Number(inv.total_amt).toLocaleString()}</td>
                 <td style="text-align: center; color: #000;">${mainStatus}</td>
                 <td style="text-align: center;"><span class="inv-status ${statusClass}" style="display:inline-block; padding: 4px 10px; border-radius: 20px;">${payStatusText}</span></td>
             </tr>
             <tr id="desktop-details-${inv.sale_id}" class="desktop-details-row" style="display: none;">
-                <td colspan="8" style="padding: 0; border-bottom: 2px solid #e2e8f0;">
+                <td colspan="9" style="padding: 0; border-bottom: 2px solid #e2e8f0;">
                     <div id="desktop-details-content-${inv.sale_id}" style="padding: 20px;"></div>
                 </td>
             </tr>
@@ -482,8 +536,10 @@ function toggleDetails(id) {
                         dHtml += `
                             <div class="item-row">
                                 <div class="item-name">${item.Product_Name}</div>
-                                <div class="item-qty">${Number(item.qty).toLocaleString()}${unitText}</div>
-                                <div class="item-total">₭ ${Number(item.amount).toLocaleString()}</div>
+                                <div class="item-meta">
+                                    <span class="item-qty">${Number(item.qty).toLocaleString()}${unitText}</span>
+                                    <span class="item-total">₭ ${Number(item.amount).toLocaleString()}</span>
+                                </div>
                             </div>
                         `;
                     });

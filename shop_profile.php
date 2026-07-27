@@ -57,50 +57,59 @@ $displayName = !empty($shop['outlet_name_la']) ? $shop['outlet_name_la'] : (!emp
         font-family: 'Noto Sans Lao', sans-serif !important;
     }
     body {
-        background-color: rgba(0,0,0,0.5); /* Modal background feel */
+        background-color: #f1f5f9;
         margin: 0;
         padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
         min-height: 100vh;
     }
-    .profile-modal {
-        background: #f8f9fa;
+    .profile-page {
+        background: #fff;
         width: 100%;
         max-width: 800px;
+        margin: 0 auto;
         border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        margin-top: 20px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
-    .modal-header {
-        background-color: #0d6efd;
-        color: white;
-        padding: 15px 20px;
+    .page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 10px;
+        padding: 20px 30px;
+        border-bottom: 1px solid #e2e8f0;
     }
-    .modal-header h3 {
+    .page-header h3 {
         margin: 0;
-        font-size: 18px;
-        font-weight: 500;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e3a8a;
         display: flex;
         align-items: center;
         gap: 10px;
     }
-    .close-btn {
-        color: white;
+    .btn-back {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #cbd5e1;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 14px;
         text-decoration: none;
-        font-size: 24px;
-        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+    }
+    .btn-back:hover {
+        background: #e2e8f0;
+        color: #1e293b;
     }
     .modal-body {
         padding: 30px;
         background-color: white;
     }
-    
+
     .profile-top {
         text-align: center;
         margin-bottom: 30px;
@@ -189,29 +198,6 @@ $displayName = !empty($shop['outlet_name_la']) ? $shop['outlet_name_la'] : (!emp
         font-size: 12px;
     }
 
-    .modal-footer {
-        padding: 15px 20px;
-        border-top: 1px solid #eee;
-        display: flex;
-        justify-content: flex-end;
-        background-color: white;
-    }
-    .btn-cancel {
-        background-color: #dc3545;
-        color: white;
-        text-decoration: none;
-        padding: 8px 20px;
-        border-radius: 6px;
-        font-size: 14px;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        transition: 0.2s;
-    }
-    .btn-cancel:hover {
-        background-color: #c82333;
-    }
-
     @media (max-width: 768px) {
         .info-container {
             flex-direction: column;
@@ -224,10 +210,10 @@ $displayName = !empty($shop['outlet_name_la']) ? $shop['outlet_name_la'] : (!emp
 </head>
 <body>
 
-<div class="profile-modal">
-    <div class="modal-header">
+<div class="profile-page">
+    <div class="page-header">
         <h3><i class="bi bi-person-circle"></i> ໂປຣໄຟລ໌ລູກຄ້າ / Customer Profile</h3>
-        <a href="menu.php" class="close-btn">&times;</a>
+        <a href="menu.php" class="btn-back"><i class="bi bi-arrow-left"></i> ກັບຄືນ</a>
     </div>
 
     <div class="modal-body">
@@ -300,12 +286,6 @@ $displayName = !empty($shop['outlet_name_la']) ? $shop['outlet_name_la'] : (!emp
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="modal-footer">
-        <a href="menu.php" class="btn-cancel">
-            <i class="bi bi-x"></i> ຍົກເລີກ
-        </a>
     </div>
 </div>
 
