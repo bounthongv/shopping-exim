@@ -235,8 +235,8 @@ if (!$shop) {
                     <th style="text-align: right;">ຈຳນວນ</th>
                     <th style="text-align: right;">ມູນຄ່າລວມ</th>
                     <th style="text-align: center;">ສະຖານະ</th>
-                    <th style="text-align: center;">ຍອດເຫຼືອ</th>
-                    <th style="text-align: center;">ການຈ່າຍ</th>
+                    <th style="text-align: center;">ຍອດຄ້າງຈ່າຍ</th>
+                    <th style="text-align: center;">ການຂາຍ</th>
                 </tr>
             </thead>
             <tbody id="invoice-tbody">
@@ -403,7 +403,7 @@ function renderInvoices(invoices) {
         
 
        // 1. ປະກາດຕົວປ່ຽນ ແລະ ຕັ້ງຄ່າ default ເປັນ 'ຕິດໜີ້'
-    let mainStatus = 'ຕິດໜີ້';
+    let mainStatus = 'ຄ້າງຈ່າຍ';
 
     // 2. ປັບເງື່ອນໄຂໃຫ້ຖືກຕ້ອງ (ເຊັກພຽງແຕ່ສະຖານະທີ່ "ຈ່າຍແລ້ວ")
     if(inv.status == '2' || inv.status_payment == '2' || inv.status_payment == '3') {
@@ -456,8 +456,41 @@ function renderInvoices(invoices) {
         `;
     });
 
-    mobileContainer.innerHTML = mobileHtml;
-    tbody.innerHTML = desktopHtml;
+    // ຄິດໄລ່ຍອດລວມ (ຈຳນວນ, ມູນຄ່າລວມ, ຍອດຄ້າງຈ່າຍ)
+    let sumQty = 0, sumAmt = 0, sumRemain = 0;
+    invoices.forEach(inv => {
+        sumQty += Number(inv.total_qty) || 0;
+        sumAmt += Number(inv.total_amt) || 0;
+        sumRemain += Number(inv.remain) || 0;
+    });
+
+    const totalRowHtml = `
+        <tr style="background: #f8fafc; border-top: 2px solid #cbd5e1; font-weight: 700; color: #000;">
+            <td colspan="5" style="text-align: right; padding: 10px;">ລວມທັງໝົດ :</td>
+            <td style="text-align: right; padding: 10px;">${sumQty.toLocaleString()}</td>
+            <td style="text-align: right; padding: 10px;">${sumAmt.toLocaleString()}</td>
+            <td></td>
+            <td style="text-align: center; padding: 10px; color: #dc2626;">${sumRemain.toLocaleString()}</td>
+            <td></td>
+        </tr>
+    `;
+
+    const mobileTotalHtml = `
+        <div class="invoice-card" style="background: #f8fafc; border: 1px solid #cbd5e1;">
+            <div class="invoice-body" style="justify-content: space-between; display: flex;">
+                <div style="font-weight: 700;">ລວມທັງໝົດ (${invoices.length} ບິນ)</div>
+            </div>
+            <div class="invoice-body" style="justify-content: space-between; display: flex; margin-top: 6px;">
+                <div>ມູນຄ່າລວມ: <b>₭ ${sumAmt.toLocaleString()}</b></div>
+            </div>
+            <div class="invoice-body" style="justify-content: space-between; display: flex; margin-top: 6px;">
+                <div style="color: #dc2626;">ຍອດຄ້າງຈ່າຍລວມ: <b>₭ ${sumRemain.toLocaleString()}</b></div>
+            </div>
+        </div>
+    `;
+
+    mobileContainer.innerHTML = mobileHtml + mobileTotalHtml;
+    tbody.innerHTML = desktopHtml + totalRowHtml;
 }
 
 function toggleDetailsDesktop(id) {

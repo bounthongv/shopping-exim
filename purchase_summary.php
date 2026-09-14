@@ -274,11 +274,24 @@ if (!$shop) {
             <div class="stat-value" id="stat-total-amt">-</div>
             <div class="stat-label">ລວມມູນຄ່າຊື້ (₭)</div>
         </div>
+<?php
+/*
         <div class="stat-tile">
             <div class="stat-icon"><i class="bi bi-graph-up"></i></div>
             <div class="stat-value" id="stat-avg">-</div>
             <div class="stat-label">ສະເລ່ຍຕໍ່ບິນ (₭)</div>
         </div>
+*/
+?>
+
+  <div class="stat-tile">
+            <div class="stat-icon"><i class="bi bi-graph-up"></i></div>
+            <div class="stat-value" id="stat-payed">-</div>
+            <div class="stat-label">ລວມມູນຄ່າຈ່າຍແລ້ວ (₭)</div>
+        </div>
+
+
+
         <div class="stat-tile debt">
             <div class="stat-icon"><i class="bi bi-exclamation-circle"></i></div>
             <div class="stat-value" id="stat-debt">-</div>
@@ -398,7 +411,11 @@ function renderSummary(d) {
     document.getElementById('stat-invoice-count').textContent = Number(d.invoice_count).toLocaleString();
     document.getElementById('stat-total-qty').textContent = Number(d.total_qty).toLocaleString();
     document.getElementById('stat-total-amt').textContent = Number(d.total_amt).toLocaleString();
+/*
     document.getElementById('stat-avg').textContent = Number(d.avg_per_invoice).toLocaleString(undefined, {maximumFractionDigits: 0});
+*/
+
+    document.getElementById('stat-payed').textContent = Number(d.total_payed).toLocaleString();
     document.getElementById('stat-debt').textContent = Number(d.debt_amt).toLocaleString();
 
     renderTopProducts(d.top_products || []);

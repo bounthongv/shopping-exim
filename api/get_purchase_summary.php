@@ -44,11 +44,44 @@ try {
     // ວັນທີ່ຊື້ຄັ້ງທຳອິດ ແລະ ຍອດຄ້າງຈ່າຍ: ຂໍ້ມູນຕະຫລອດອາຍຸບັນຊີ ບໍ່ຂຶ້ນກັບຕົວກອງວັນທີ່ທີ່ເລືອກ
     // (ໜີ້ຄ້າງແມ່ນຍອດສະສົມ ບໍ່ແມ່ນຍອດສະເພາະຊ່ວງເວລາ)
     $lifetime_sql = "SELECT
-                MIN(product_sale.sale_date) as first_purchase_date,
-                SUM(CASE WHEN product_sale.status_payment IS NULL OR product_sale.status_payment = '' OR product_sale.status_payment = '1'
-                     THEN product_sale.qty * product_sale.price ELSE 0 END) as debt_amt
-            FROM product_sale
-            WHERE $base_where";
+  MIN(product_sale.sale_date) AS first_purchase_date,
+  /*
+  SUM(CASE WHEN product_sale.status_payment IS NULL OR product_sale.status_payment = '' OR product_sale.status_payment = '1'
+  THEN product_sale.qty * product_sale.price ELSE 0 END) as debt_amt
+  */
+  product_sale_2.total_remain AS debt_amt
+FROM
+  product_sale
+
+
+
+  LEFT JOIN (
+    SELECT
+      customer_id,
+      SUM(remain) AS total_remain
+    FROM
+      (
+        SELECT
+          customer_id,
+          remain
+        FROM
+          product_sale
+        WHERE
+          $base_where
+        GROUP BY
+          sale_id
+      ) AS subquery
+    GROUP BY
+      customer_id
+  ) AS product_sale_2 ON product_sale_2.customer_id = product_sale.customer_id
+
+
+
+
+
+
+WHERE
+  $base_where";
     $lifetime_query = mysqli_query($con, $lifetime_sql);
     if(!$lifetime_query) {
         throw new Exception("ເກີດຂໍ້ຜິດພາດ: " . mysqli_error($con));
@@ -79,6 +112,11 @@ try {
     $invoice_count = (int)($summary['invoice_count'] ?? 0);
     $total_amt = (float)($summary['total_amt'] ?? 0);
 
+
+
+   
+
+    
     ob_end_clean();
     echo json_encode([
         "status" => "success",
@@ -86,6 +124,7 @@ try {
             "invoice_count" => $invoice_count,
             "total_qty" => (float)($summary['total_qty'] ?? 0),
             "total_amt" => $total_amt,
+            "total_payed" => (float)($total_amt-$lifetime_row['debt_amt'] ?? 0),
             "debt_amt" => (float)($lifetime_row['debt_amt'] ?? 0),
             "avg_per_invoice" => $invoice_count > 0 ? $total_amt / $invoice_count : 0,
             "first_purchase_date" => $lifetime_row['first_purchase_date'] ?? null,
