@@ -161,7 +161,7 @@ if (!$shop) {
     <!-- Page Header -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0;">
         <h2 style="margin: 0; font-size: 26px; font-weight: 700; color: #1e3a8a;">ລາຍການອິນວອຍ</h2>
-        <button type="button" class="btn-back" onclick="window.location.href='menu.php'">
+        <button type="button" class="btn-back" onClick="window.location.href='menu.php'">
             <i class="bi bi-arrow-left"></i> ກັບຄືນ
         </button>
     </div>
@@ -235,6 +235,7 @@ if (!$shop) {
                     <th style="text-align: right;">ຈຳນວນ</th>
                     <th style="text-align: right;">ມູນຄ່າລວມ</th>
                     <th style="text-align: center;">ສະຖານະ</th>
+                    <th style="text-align: center;">ຍອດເຫຼືອ</th>
                     <th style="text-align: center;">ການຈ່າຍ</th>
                 </tr>
             </thead>
@@ -396,8 +397,20 @@ function renderInvoices(invoices) {
             statusClass = 'badge-transfer';
         }
 
-        let mainStatus = inv.status ? inv.status : '-';
+
+
+       // let mainStatus = inv.status ? inv.status : '-';
         
+
+       // 1. ປະກາດຕົວປ່ຽນ ແລະ ຕັ້ງຄ່າ default ເປັນ 'ຕິດໜີ້'
+    let mainStatus = 'ຕິດໜີ້';
+
+    // 2. ປັບເງື່ອນໄຂໃຫ້ຖືກຕ້ອງ (ເຊັກພຽງແຕ່ສະຖານະທີ່ "ຈ່າຍແລ້ວ")
+    if(inv.status == '2' || inv.status_payment == '2' || inv.status_payment == '3') {
+        mainStatus = 'ຈ່າຍແລ້ວ'; // แก้ไขตัวอักษรเป็นภาษาลาวถูกต้อง
+    }
+
+
         // Mobile HTML
         mobileHtml += `
             <div class="invoice-card" onclick="toggleDetails('${inv.sale_id}')">
@@ -432,6 +445,7 @@ function renderInvoices(invoices) {
                 <td style="text-align: right; color: #000;">${Number(inv.total_qty).toLocaleString()}</td>
                 <td style="text-align: right; font-weight: 600; color: #000;">${Number(inv.total_amt).toLocaleString()}</td>
                 <td style="text-align: center; color: #000;">${mainStatus}</td>
+                <td style="text-align: center; color: #000;">${Number(inv.remain).toLocaleString()}</td>
                 <td style="text-align: center;"><span class="inv-status ${statusClass}" style="display:inline-block; padding: 4px 10px; border-radius: 20px;">${payStatusText}</span></td>
             </tr>
             <tr id="desktop-details-${inv.sale_id}" class="desktop-details-row" style="display: none;">

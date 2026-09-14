@@ -192,7 +192,7 @@ if (!$shop) {
 
         <div class="action-row" style="flex: 1; margin-bottom: 0; align-items: flex-end;">
             <button type="button" class="btn-primary" id="btn-search" style="margin-bottom: 0;"><i class="bi bi-search"></i> ຄົ້ນຫາ</button>
-            <button type="button" class="btn-secondary" id="btn-clear" style="margin-bottom: 0;"><i class="bi bi-x-circle"></i> ລ้าง</button>
+            <button type="button" class="btn-secondary" id="btn-clear" style="margin-bottom: 0;"><i class="bi bi-x-circle"></i> ລ້າງ</button>
         </div>
     </div>
 

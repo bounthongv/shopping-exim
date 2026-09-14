@@ -39,7 +39,8 @@ try {
         // ສະນັ້ນຕ້ອງບວກໃຫ້ໝົດ ຈຶ່ງໄດ້ຈຳນວນ ແລະ ມູນຄ່າທີ່ຖືກຕ້ອງ
         $sql = "SELECT product_sale.sale_id, product_sale.sale_date, product_sale.status_payment, product_sale.status, product_sale.order_id,
                 sum(product_sale.qty*product_sale.price) as total_amt,
-                sum(product_sale.qty) as total_qty
+                sum(product_sale.qty) as total_qty,
+                remain
                 FROM product_sale
                 WHERE 1=1 $where
                 GROUP BY product_sale.sale_id
