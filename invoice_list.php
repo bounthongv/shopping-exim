@@ -236,7 +236,6 @@ if (!$shop) {
                     <th style="text-align: right;">ມູນຄ່າລວມ</th>
                     <th style="text-align: center;">ສະຖານະ</th>
                     <th style="text-align: center;">ຍອດຄ້າງຈ່າຍ</th>
-                    <th style="text-align: center;">ການຂາຍ</th>
                 </tr>
             </thead>
             <tbody id="invoice-tbody">
@@ -434,7 +433,10 @@ function renderInvoices(invoices) {
             </div>
         `;
 
+
         // Desktop HTML (8 columns)
+
+/*
         desktopHtml += `
             <tr onclick="toggleDetailsDesktop('${inv.sale_id}')" style="cursor: pointer; border-bottom: 1px solid #e2e8f0; color: #000;">
                 <td style="text-align: center;"><i id="icon-${inv.sale_id}" class="bi bi-plus-circle-fill" style="color: #3b82f6; font-size: 22px;"></i></td>
@@ -454,6 +456,26 @@ function renderInvoices(invoices) {
                 </td>
             </tr>
         `;
+*/
+ desktopHtml += `
+            <tr onclick="toggleDetailsDesktop('${inv.sale_id}')" style="cursor: pointer; border-bottom: 1px solid #e2e8f0; color: #000;">
+                <td style="text-align: center;"><i id="icon-${inv.sale_id}" class="bi bi-plus-circle-fill" style="color: #3b82f6; font-size: 22px;"></i></td>
+                <td style="text-align: center; color: #000;">${index + 1}</td>
+                <td style="color: #000; font-weight: 600;">${inv.sale_id}</td>
+                <td style="color: #000;">${inv.order_id || '-'}</td>
+                <td style="text-align: center; color: #000; white-space: nowrap;">${formatDate(inv.sale_date)}</td>
+                <td style="text-align: right; color: #000;">${Number(inv.total_qty).toLocaleString()}</td>
+                <td style="text-align: right; font-weight: 600; color: #000;">${Number(inv.total_amt).toLocaleString()}</td>
+                <td style="text-align: center; color: #000;">${mainStatus}</td>
+                <td style="text-align: center; color: #000;">${Number(inv.remain).toLocaleString()}</td>
+            </tr>
+            <tr id="desktop-details-${inv.sale_id}" class="desktop-details-row" style="display: none;">
+                <td colspan="9" style="padding: 0; border-bottom: 2px solid #e2e8f0;">
+                    <div id="desktop-details-content-${inv.sale_id}" style="padding: 20px;"></div>
+                </td>
+            </tr>
+        `;
+
     });
 
     // ຄິດໄລ່ຍອດລວມ (ຈຳນວນ, ມູນຄ່າລວມ, ຍອດຄ້າງຈ່າຍ)
@@ -471,7 +493,7 @@ function renderInvoices(invoices) {
             <td style="text-align: right; padding: 10px;">${sumAmt.toLocaleString()}</td>
             <td></td>
             <td style="text-align: center; padding: 10px; color: #dc2626;">${sumRemain.toLocaleString()}</td>
-            <td></td>
+
         </tr>
     `;
 
