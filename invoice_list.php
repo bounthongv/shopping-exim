@@ -91,6 +91,7 @@ if (!$shop) {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    min-width: 0;
 }
 .btn-secondary {
     background: #fef2f2;
@@ -105,8 +106,133 @@ if (!$shop) {
     transition: all 0.2s;
 }
 .btn-secondary:hover { background: #fee2e2; }
+.btn-success {
+    background: #f0fdf4;
+    color: #22c55e;
+    border: 1px solid #86efac;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s;
+}
+.btn-success:hover { background: #53fa90; }
 .btn-primary { flex: 1; }
-.action-row button { flex: none; width: auto; padding: 12px 20px; }
+
+/* ແກ້ປຸ່ມລົ້ນ panel: ໃຫ້ປຸ່ມຫົດໄດ້ ແລະ ບໍ່ຕັດແຖວ */
+.action-row button {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+    padding: 12px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pay-count {
+    display: inline-block;
+    min-width: 20px;
+    padding: 0 6px;
+    margin-left: 4px;
+    border-radius: 10px;
+    background: #22c55e;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ===== Pay Modal (custom, no Bootstrap JS needed) ===== */
+.pay-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.pay-modal-overlay.show {
+    display: flex;
+}
+.pay-modal {
+    background: #fff;
+    width: 100%;
+    max-width: 380px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+.pay-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.pay-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e3a8a;
+}
+.pay-modal-close {
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+.pay-modal-close:hover { color: #dc2626; }
+.pay-modal-body {
+    padding: 20px;
+    text-align: center;
+}
+#qr-container {
+    width: 240px;
+    height: 240px;
+    max-width: 100%;
+    margin: 0 auto;
+    border: 2px dashed #cbd5e1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 15px;
+    background: #f8fafc;
+}
+#qr-container img,
+#qr-container canvas {
+    max-width: 100%;
+    height: auto;
+}
+.pay-modal-note {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #475569;
+}
+.pay-modal-footer {
+    padding: 12px 18px 18px;
+    text-align: center;
+}
+.pay-modal-footer button {
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.pay-modal-footer button:hover { background: #e2e8f0; }
 
 @media (max-width: 640px) {
     .filter-desktop-row {
@@ -125,8 +251,70 @@ if (!$shop) {
         gap: 10px !important;
     }
     .action-row button {
-        flex: 1 !important;
+        flex: 1 1 0 !important;
     }
+}
+
+.pay-amount { font-size: 26px; font-weight: 700; color: #1e3a8a; margin-bottom: 12px; }
+.pay-countdown { margin-top: 10px; font-size: 14px; color: #475569; }
+.pay-error { margin-top: 10px; font-size: 14px; color: #dc2626; }
+#qr-container.has-qr { border: none; background: #fff; }
+#qr-container.paid {
+    border: none;
+    background: #f0fdf4;
+    color: #16a34a;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 700;
+}
+#qr-container.paid i { font-size: 72px; line-height: 1; }
+.pay-modal-footer button { margin: 0 4px; }
+
+/* ===== ເລືອກບິນເພື່ອຈ່າຍ ===== */
+.bill-chk, .chk-all {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #22c55e;
+    vertical-align: middle;
+}
+.bill-select-wrap {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px 4px 0;
+}
+.mobile-select-all {
+    padding: 8px 4px 12px;
+    font-weight: 600;
+    color: #1e3a8a;
+}
+.mobile-select-all label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+#selection-bar {
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #166534;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 0 0 14px;
+    font-size: 15px;
+}
+#selection-bar button {
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 8px;
 }
 </style>
 </head>
@@ -220,13 +408,21 @@ if (!$shop) {
         <div class="action-row" style="flex: 1; margin-bottom: 0; align-items: flex-end;">
             <button type="button" class="btn-primary" id="btn-search" style="margin-bottom: 0;"><i class="bi bi-search"></i> ຄົ້ນຫາ</button>
             <button type="button" class="btn-secondary" id="btn-pdf" style="margin-bottom: 0;"><i class="bi bi-file-earmark-pdf"></i> PDF</button>
+            <button type="button" class="btn-success" id="btn-pay" style="margin-bottom: 0;"><i class="bi bi-credit-card"></i> ຈ່າຍ</button>
         </div>
+    </div>
+
+    <!-- ແຖບສະຫຼຸບບິນທີ່ເລືອກ -->
+    <div id="selection-bar">
+        <div>ເລືອກແລ້ວ <b id="sel-count">0</b> ບິນ · ຍອດ ₭ <b id="sel-sum">0</b></div>
+        <button type="button" id="sel-clear">ລ້າງ</button>
     </div>
 
     <div class="desktop-table-container">
         <table class="invoice-table">
             <thead>
                 <tr>
+                    <th style="width: 40px; text-align: center;"><input type="checkbox" class="chk-all" title="ເລືອກທັງໝົດ"></th>
                     <th style="width: 40px; text-align: center;"></th>
                     <th style="width: 50px; text-align: center;">ລ/ດ</th>
                     <th>ເລກທີ</th>
@@ -250,8 +446,84 @@ if (!$shop) {
 
 </div>
 
+<!-- Pay Modal (QR Code) -->
+<div class="pay-modal-overlay" id="pay-modal" aria-hidden="true">
+    <div class="pay-modal" role="dialog" aria-modal="true" aria-labelledby="pay-modal-title">
+        <div class="pay-modal-header">
+            <h3 id="pay-modal-title"><i class="bi bi-credit-card"></i> ຊຳລະເງິນ</h3>
+            <button type="button" class="pay-modal-close" id="pay-modal-close" aria-label="ປິດ">&times;</button>
+        </div>
+        <div class="pay-modal-body">
+            <div id="pay-amount" class="pay-amount"></div>
+            <div id="qr-container">QR Code</div>
+            <div id="pay-countdown" class="pay-countdown"></div>
+            <div id="pay-error" class="pay-error"></div>
+            <div class="pay-modal-note" id="pay-note">ສະແກນ QR Code ເພື່ອຊຳລະເງິນ</div>
+        </div>
+        <div class="pay-modal-footer">
+            <button type="button" id="pay-modal-regen" style="display:none;">ສ້າງ QR ໃໝ່</button>
+            <button type="button" id="pay-modal-cancel">ປິດ</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script>
+// ===== ສະຖານະການເລືອກບິນ (ເກັບໃນຕົວແປ ບໍ່ເກັບໃນໜ້າຕາຕະລາງ) =====
+const selectedBills = new Map();   // sale_id -> ຍອດຄ້າງ (ໃຊ້ສະແດງຜົນເທົ່ານັ້ນ ຍອດຈິງຄິດຈາກຖານຂໍ້ມູນ)
+const payableIds = new Set();      // sale_id ຂອງບິນທີ່ຍັງຈ່າຍໄດ້ໃນຜົນຄົ້ນຫາປັດຈຸບັນ
+
+// ບິນທີ່ຍັງຈ່າຍໄດ້ = ຍັງບໍ່ຈ່າຍ ແລະ ມີຍອດຄ້າງ (ຕາມເງື່ອນໄຂໃນ create_payment.php)
+function isPayable(inv) {
+    const paid = inv.status == '2' || inv.status_payment == '2' || inv.status_payment == '3';
+    return !paid && Number(inv.remain) > 0;
+}
+
+function billCheckbox(inv) {
+    if (!isPayable(inv)) return '';
+    return `<input type="checkbox" class="bill-chk" data-sale="${inv.sale_id}" data-remain="${Number(inv.remain)}">`;
+}
+
+function setBillSelected(saleId, remain, checked) {
+    if (checked) {
+        selectedBills.set(String(saleId), Number(remain) || 0);
+    } else {
+        selectedBills.delete(String(saleId));
+    }
+}
+
+// ອັບເດດຊ່ອງຕິກ, ແຖບສະຫຼຸບ ແລະ ປຸ່ມຈ່າຍ ໃຫ້ຕົງກັບການເລືອກ
+function refreshSelectionUI() {
+    document.querySelectorAll('.bill-chk').forEach(cb => {
+        cb.checked = selectedBills.has(String(cb.dataset.sale));
+    });
+
+    const n = selectedBills.size;
+    let sum = 0;
+    selectedBills.forEach(v => { sum += v; });
+
+    document.querySelectorAll('.chk-all').forEach(cb => {
+        cb.disabled = payableIds.size === 0;
+        cb.checked = n > 0 && n === payableIds.size;
+        cb.indeterminate = n > 0 && n < payableIds.size;
+    });
+
+    const bar = document.getElementById('selection-bar');
+    if (bar) {
+        bar.style.display = n > 0 ? 'flex' : 'none';
+        document.getElementById('sel-count').textContent = n;
+        document.getElementById('sel-sum').textContent = sum.toLocaleString();
+    }
+
+    const btn = document.getElementById('btn-pay');
+    if (btn) {
+        // ໃຊ້ badge ນ້ອຍໆ ແທນການຕໍ່ຂໍ້ຄວາມ ເພື່ອບໍ່ໃຫ້ປຸ່ມກວ້າງຂຶ້ນຈົນລົ້ນ panel
+        btn.innerHTML = '<i class="bi bi-credit-card"></i> ຈ່າຍ' +
+            (n > 0 ? '<span class="pay-count">' + n + '</span>' : '');
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const periodSelect = document.getElementById('period_select');
     const customDateSection = document.getElementById('custom-date-section');
@@ -315,6 +587,276 @@ document.addEventListener("DOMContentLoaded", function() {
         window.open(`print/export_invoice_pdf.php?from_date=${from_date}&to_date=${to_date}&search=${search}`, '_blank');
     });
 
+    // ===== ຕິກເລືອກບິນ (ໃຊ້ event delegation ເພາະຕາຕະລາງຖືກວາດໃໝ່ທຸກຄັ້ງ) =====
+    document.addEventListener('change', function(e) {
+        const t = e.target;
+        if (t.classList.contains('bill-chk')) {
+            setBillSelected(t.dataset.sale, t.dataset.remain, t.checked);
+            refreshSelectionUI();
+        } else if (t.classList.contains('chk-all')) {
+            document.querySelectorAll('.bill-chk').forEach(cb => {
+                setBillSelected(cb.dataset.sale, cb.dataset.remain, t.checked);
+            });
+            refreshSelectionUI();
+        }
+    });
+
+    document.getElementById('sel-clear').addEventListener('click', function() {
+        selectedBills.clear();
+        refreshSelectionUI();
+    });
+
+    // ===== Pay Modal =====
+    const payModal     = document.getElementById('pay-modal');
+    const qrBox        = document.getElementById('qr-container');
+    const payAmount    = document.getElementById('pay-amount');
+    const payCountdown = document.getElementById('pay-countdown');
+    const payError     = document.getElementById('pay-error');
+    const payNote      = document.getElementById('pay-note');
+    const btnRegen     = document.getElementById('pay-modal-regen');
+
+    let countdownTimer = null;
+    let pollTimer      = null;
+    let pollBusy       = false;   // ກັນຍິງຊ້ອນ ຖ້າຄຳຂໍກ່ອນໜ້າຍັງບໍ່ຕອບ
+    let currentBill    = '';      // bill_number ຂອງ QR ທີ່ສະແດງຢູ່
+    let paidDone       = false;   // ຈ່າຍສຳເລັດແລ້ວ → ຕອນກົດປິດໃຫ້ໂຫຼດຂໍ້ມູນໃໝ່
+
+    function stopCountdown() {
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+        }
+    }
+
+    function stopPolling() {
+        if (pollTimer) {
+            clearInterval(pollTimer);
+            pollTimer = null;
+        }
+        pollBusy = false;
+    }
+
+    // ຕັ້ງຂໍ້ຄວາມໃນກ່ອງ QR ແລະ ລ້າງສະຖານະ has-qr / paid
+    function resetQrBox(text) {
+        qrBox.classList.remove('has-qr', 'paid');
+        qrBox.innerHTML = text;
+    }
+
+    function showPaid() {
+        if (paidDone) return;
+        paidDone = true;
+        stopCountdown();
+        stopPolling();
+        qrBox.classList.remove('has-qr');
+        qrBox.classList.add('paid');
+        qrBox.innerHTML = '<i class="bi bi-check-circle-fill"></i><div>ຊຳລະສຳເລັດ</div>';
+        payCountdown.textContent = '';
+        payError.textContent = '';
+        payNote.style.display = 'none';
+        btnRegen.style.display = 'none';
+    }
+
+    function showExpired() {
+        if (paidDone) return;
+        stopCountdown();
+        stopPolling();
+        resetQrBox('QR ໝົດອາຍຸແລ້ວ');
+        payCountdown.textContent = '';
+        btnRegen.style.display = 'inline-block';
+    }
+
+    function showPayError(message) {
+        stopCountdown();
+        stopPolling();
+        resetQrBox('QR Code');
+        payError.textContent = message;
+        btnRegen.style.display = 'inline-block';
+    }
+
+    function showNoBills(message) {
+        resetQrBox('ບໍ່ມີຍອດຄ້າງຈ່າຍ');
+        payError.textContent = message;
+        btnRegen.style.display = 'none';   // ກົດສ້າງໃໝ່ກໍບໍ່ມີຜົນ ຈຶ່ງບໍ່ສະແດງ
+    }
+
+    // ຖາມສະຖານະຈາກຕາຕະລາງ payments ຂອງເຮົາເອງ (ບໍ່ໄດ້ຖາມທະນາຄານ)
+    function checkPayment() {
+        const bill = currentBill;
+        if (!bill || paidDone) return Promise.resolve(null);
+
+        const fd = new FormData();
+        fd.append('bill_number', bill);
+
+        return fetch('api/check_payment.php', { method: 'POST', body: fd })
+            .then(response => response.json())
+            .then(data => {
+                // ຖ້າໃນລະຫວ່າງລໍຖ້າ ໄດ້ປິດ ຫຼື ສ້າງ QR ໃໝ່ແລ້ວ ໃຫ້ຖິ້ມຜົນຂອງຄຳຂໍເກົ່າ
+                if (bill !== currentBill) return null;
+                if (data.status !== 'success') return null;
+
+                const st = data.data.payment_status;
+                if (st === 'paid') {
+                    showPaid();
+                } else if (st === 'expired' || st === 'failed') {
+                    showExpired();
+                }
+                return st;
+            })
+            .catch(err => {
+                console.error(err);
+                return null;
+            });
+    }
+
+    function startPolling() {
+        stopPolling();
+        pollTimer = setInterval(function() {
+            if (pollBusy) return;
+            pollBusy = true;
+            checkPayment().finally(function() { pollBusy = false; });
+        }, 3000);
+    }
+
+    function startCountdown(seconds) {
+        stopCountdown();
+        let left = seconds;
+
+        const tick = function() {
+            if (left <= 0) {
+                stopCountdown();
+                stopPolling();
+                // ກວດຄັ້ງສຸດທ້າຍ ເຜື່ອລູກຄ້າຈ່າຍໃນວິນາທີສຸດທ້າຍ
+                checkPayment().then(function(st) {
+                    if (st !== 'paid' && !paidDone) showExpired();
+                });
+                return;
+            }
+            const m = String(Math.floor(left / 60)).padStart(2, '0');
+            const s = String(left % 60).padStart(2, '0');
+            payCountdown.textContent = 'ໝົດອາຍຸໃນ ' + m + ':' + s;
+            left--;
+        };
+
+        tick();
+        countdownTimer = setInterval(tick, 1000);
+    }
+
+    function createPayment() {
+        stopCountdown();
+        stopPolling();
+        paidDone    = false;
+        currentBill = '';
+        payError.textContent = '';
+        payAmount.textContent = '';
+        payCountdown.textContent = '';
+        payNote.style.display = '';
+        btnRegen.style.display = 'none';
+        resetQrBox('ກຳລັງສ້າງ QR...');
+
+        const formData = new FormData();
+
+        if (selectedBills.size > 0) {
+            // ເລືອກບິນເອງ → ສົ່ງສະເພາະ sale_ids
+            selectedBills.forEach((remain, saleId) => {
+                formData.append('sale_ids[]', saleId);
+            });
+        } else {
+            // ບໍ່ໄດ້ເລືອກ → ສົ່ງຕົວກອງ (ຈ່າຍທຸກບິນທີ່ຄ້າງຕາມຕົວກອງ)
+            let from_date = document.getElementById('from_date').value;
+            let to_date   = document.getElementById('to_date').value;
+            const search  = document.getElementById('search').value;
+            const period  = document.getElementById('period_select').value;
+
+            if (period === 'all') {
+                from_date = '';
+                to_date   = '';
+            }
+            formData.append('from_date', from_date);
+            formData.append('to_date', to_date);
+            formData.append('search', search);
+        }
+
+        fetch('api/create_payment.php', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 'success') {
+                    if (data.code === 'no_bills') {
+                        showNoBills(data.message);
+                    } else {
+                        showPayError(data.message || 'ເກີດຂໍ້ຜິດພາດ');
+                    }
+                    return;
+                }
+
+                const d = data.data;
+                currentBill = d.bill_number;
+
+                // ວາດ QR (qrcode-generator ເລືອກຂະໜາດໃຫ້ເອງ ຮອງຮັບຂໍ້ຄວາມຍາວ)
+                const qr = qrcode(0, 'M');
+                qr.addData(d.qr_data);
+                qr.make();
+                qrBox.classList.remove('paid');
+                qrBox.innerHTML = qr.createImgTag(4, 8);
+                const img = qrBox.querySelector('img');
+                if (img) {
+                    img.style.width = '220px';
+                    img.style.height = '220px';
+                    img.style.imageRendering = 'pixelated';
+                }
+                qrBox.classList.add('has-qr');
+
+                payAmount.textContent = '₭ ' + Number(d.amount).toLocaleString() + ' (' + d.bill_count + ' ບິນ)';
+                startCountdown(d.expires_in);
+                startPolling();   // ເລີ່ມຖາມສະຖານະທຸກ 3 ວິນາທີ
+            })
+            .catch(err => {
+                console.error(err);
+                showPayError('ເກີດຂໍ້ຜິດພາດໃນການເຊື່ອມຕໍ່');
+            });
+    }
+
+    function openPayModal() {
+        payModal.classList.add('show');
+        payModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        createPayment();
+    }
+
+    function closePayModal() {
+        stopCountdown();
+        stopPolling();
+        payModal.classList.remove('show');
+        payModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        resetQrBox('QR Code');
+        currentBill = '';
+
+        // ຈ່າຍສຳເລັດແລ້ວ → ໂຫຼດຂໍ້ມູນຕາມຕົວກອງທີ່ຄົ້ນຫາຢູ່ໃໝ່ ເພື່ອສະແດງສະຖານະຈ່າຍແລ້ວ
+        if (paidDone) {
+            paidDone = false;
+            loadInvoices();   // ລ້າງການເລືອກບິນໃຫ້ເອງ
+        }
+    }
+
+    document.getElementById('btn-pay').addEventListener('click', openPayModal);
+    document.getElementById('pay-modal-close').addEventListener('click', closePayModal);
+    document.getElementById('pay-modal-cancel').addEventListener('click', closePayModal);
+    btnRegen.addEventListener('click', createPayment);
+
+    // ກົດພື້ນທີ່ມືດດ້ານນອກ ເພື່ອປິດ
+    payModal.addEventListener('click', function(e) {
+        if (e.target === payModal) {
+            closePayModal();
+        }
+    });
+
+    // ກົດ Esc ເພື່ອປິດ
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && payModal.classList.contains('show')) {
+            closePayModal();
+        }
+    });
+
     loadInvoices();
 });
 
@@ -329,11 +871,16 @@ function loadInvoices() {
         to_date = '';
     }
 
+    // ໂຫຼດຂໍ້ມູນໃໝ່ທຸກຄັ້ງ → ລ້າງການເລືອກເກົ່າ (ກັນເລືອກບິນທີ່ບໍ່ຢູ່ໃນຜົນຄົ້ນຫາແລ້ວ)
+    selectedBills.clear();
+    payableIds.clear();
+    refreshSelectionUI();
+
     const mobileContainer = document.getElementById('invoice-mobile-container');
     const tbody = document.getElementById('invoice-tbody');
     
     mobileContainer.innerHTML = '<div class="empty-state">ກຳລັງໂຫຼດຂໍ້ມູນ...</div>';
-    tbody.innerHTML = '<tr><td colspan="9" class="empty-state" style="text-align: center; padding: 40px;">ກຳລັງໂຫຼດຂໍ້ມູນ...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="10" class="empty-state" style="text-align: center; padding: 40px;">ກຳລັງໂຫຼດຂໍ້ມູນ...</td></tr>';
 
     const formData = new FormData();
     formData.append('action', 'list');
@@ -351,12 +898,12 @@ function loadInvoices() {
             renderInvoices(data.data);
         } else {
             mobileContainer.innerHTML = `<div class="error-msg">${data.message}</div>`;
-            tbody.innerHTML = `<tr><td colspan="9" class="error-msg">${data.message}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="10" class="error-msg">${data.message}</td></tr>`;
         }
     })
     .catch(error => {
         mobileContainer.innerHTML = `<div class="error-msg">ເກີດຂໍ້ຜິດພາດໃນການໂຫຼດຂໍ້ມູນ</div>`;
-        tbody.innerHTML = `<tr><td colspan="9" class="error-msg">ເກີດຂໍ້ຜິດພາດ</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" class="error-msg">ເກີດຂໍ້ຜິດພາດ</td></tr>`;
     });
 }
 
@@ -378,9 +925,16 @@ function renderInvoices(invoices) {
     
     if(invoices.length === 0) {
         mobileContainer.innerHTML = '<div class="empty-state">ບໍ່ພົບຂໍ້ມູນ</div>';
-        tbody.innerHTML = '<tr><td colspan="9" class="empty-state" style="text-align: center; padding: 40px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" class="empty-state" style="text-align: center; padding: 40px;">ບໍ່ພົບຂໍ້ມູນ</td></tr>';
+        refreshSelectionUI();
         return;
     }
+
+    // ລວບລວມບິນທີ່ຈ່າຍໄດ້ ກ່ອນວາດຕາຕະລາງ
+    payableIds.clear();
+    invoices.forEach(inv => {
+        if (isPayable(inv)) payableIds.add(String(inv.sale_id));
+    });
 
     let mobileHtml = '';
     let desktopHtml = '';
@@ -396,25 +950,22 @@ function renderInvoices(invoices) {
             statusClass = 'badge-transfer';
         }
 
+        // 1. ປະກາດຕົວປ່ຽນ ແລະ ຕັ້ງຄ່າ default ເປັນ 'ຄ້າງຈ່າຍ'
+        let mainStatus = 'ຄ້າງຈ່າຍ';
 
+        // 2. ເຊັກສະຖານະທີ່ "ຈ່າຍແລ້ວ"
+        if(inv.status == '2' || inv.status_payment == '2' || inv.status_payment == '3') {
+            mainStatus = 'ຈ່າຍແລ້ວ';
+        }
 
-       // let mainStatus = inv.status ? inv.status : '-';
-        
-
-       // 1. ປະກາດຕົວປ່ຽນ ແລະ ຕັ້ງຄ່າ default ເປັນ 'ຕິດໜີ້'
-    let mainStatus = 'ຄ້າງຈ່າຍ';
-
-    // 2. ປັບເງື່ອນໄຂໃຫ້ຖືກຕ້ອງ (ເຊັກພຽງແຕ່ສະຖານະທີ່ "ຈ່າຍແລ້ວ")
-    if(inv.status == '2' || inv.status_payment == '2' || inv.status_payment == '3') {
-        mainStatus = 'ຈ່າຍແລ້ວ'; // แก้ไขตัวอักษรเป็นภาษาลาวถูกต้อง
-    }
-
+        const chkHtml = billCheckbox(inv);
 
         // Mobile HTML
         mobileHtml += `
             <div class="invoice-card" onclick="toggleDetails('${inv.sale_id}')">
                 <div class="invoice-header">
                     <div>
+                        ${chkHtml ? `<span class="bill-select-wrap" onclick="event.stopPropagation()">${chkHtml}</span>` : ''}
                         <span class="invoice-no">${inv.sale_id}</span>
                         ${inv.order_id ? `<br><span style="font-size: 13px; color: #666;">ເລກທີສັ່ງຊື້: ${inv.order_id}</span>` : ''}
                     </div>
@@ -433,32 +984,10 @@ function renderInvoices(invoices) {
             </div>
         `;
 
-
-        // Desktop HTML (8 columns)
-
-/*
+        // Desktop HTML (10 columns)
         desktopHtml += `
             <tr onclick="toggleDetailsDesktop('${inv.sale_id}')" style="cursor: pointer; border-bottom: 1px solid #e2e8f0; color: #000;">
-                <td style="text-align: center;"><i id="icon-${inv.sale_id}" class="bi bi-plus-circle-fill" style="color: #3b82f6; font-size: 22px;"></i></td>
-                <td style="text-align: center; color: #000;">${index + 1}</td>
-                <td style="color: #000; font-weight: 600;">${inv.sale_id}</td>
-                <td style="color: #000;">${inv.order_id || '-'}</td>
-                <td style="text-align: center; color: #000; white-space: nowrap;">${formatDate(inv.sale_date)}</td>
-                <td style="text-align: right; color: #000;">${Number(inv.total_qty).toLocaleString()}</td>
-                <td style="text-align: right; font-weight: 600; color: #000;">${Number(inv.total_amt).toLocaleString()}</td>
-                <td style="text-align: center; color: #000;">${mainStatus}</td>
-                <td style="text-align: center; color: #000;">${Number(inv.remain).toLocaleString()}</td>
-                <td style="text-align: center;"><span class="inv-status ${statusClass}" style="display:inline-block; padding: 4px 10px; border-radius: 20px;">${payStatusText}</span></td>
-            </tr>
-            <tr id="desktop-details-${inv.sale_id}" class="desktop-details-row" style="display: none;">
-                <td colspan="9" style="padding: 0; border-bottom: 2px solid #e2e8f0;">
-                    <div id="desktop-details-content-${inv.sale_id}" style="padding: 20px;"></div>
-                </td>
-            </tr>
-        `;
-*/
- desktopHtml += `
-            <tr onclick="toggleDetailsDesktop('${inv.sale_id}')" style="cursor: pointer; border-bottom: 1px solid #e2e8f0; color: #000;">
+                <td style="text-align: center;" onclick="event.stopPropagation()">${chkHtml}</td>
                 <td style="text-align: center;"><i id="icon-${inv.sale_id}" class="bi bi-plus-circle-fill" style="color: #3b82f6; font-size: 22px;"></i></td>
                 <td style="text-align: center; color: #000;">${index + 1}</td>
                 <td style="color: #000; font-weight: 600;">${inv.sale_id}</td>
@@ -470,7 +999,7 @@ function renderInvoices(invoices) {
                 <td style="text-align: center; color: #000;">${Number(inv.remain).toLocaleString()}</td>
             </tr>
             <tr id="desktop-details-${inv.sale_id}" class="desktop-details-row" style="display: none;">
-                <td colspan="9" style="padding: 0; border-bottom: 2px solid #e2e8f0;">
+                <td colspan="10" style="padding: 0; border-bottom: 2px solid #e2e8f0;">
                     <div id="desktop-details-content-${inv.sale_id}" style="padding: 20px;"></div>
                 </td>
             </tr>
@@ -488,7 +1017,7 @@ function renderInvoices(invoices) {
 
     const totalRowHtml = `
         <tr style="background: #f8fafc; border-top: 2px solid #cbd5e1; font-weight: 700; color: #000;">
-            <td colspan="5" style="text-align: right; padding: 10px;">ລວມທັງໝົດ :</td>
+            <td colspan="6" style="text-align: right; padding: 10px;">ລວມທັງໝົດ :</td>
             <td style="text-align: right; padding: 10px;">${sumQty.toLocaleString()}</td>
             <td style="text-align: right; padding: 10px;">${sumAmt.toLocaleString()}</td>
             <td></td>
@@ -511,8 +1040,17 @@ function renderInvoices(invoices) {
         </div>
     `;
 
-    mobileContainer.innerHTML = mobileHtml + mobileTotalHtml;
+    // ແຖວ "ເລືອກທັງໝົດ" ສຳລັບມືຖື (ສະແດງສະເພາະເມື່ອມີບິນທີ່ຈ່າຍໄດ້)
+    const mobileSelectAll = payableIds.size > 0 ? `
+        <div class="mobile-select-all">
+            <label><input type="checkbox" class="chk-all"> ເລືອກບິນຄ້າງຈ່າຍທັງໝົດ</label>
+        </div>
+    ` : '';
+
+    mobileContainer.innerHTML = mobileSelectAll + mobileHtml + mobileTotalHtml;
     tbody.innerHTML = desktopHtml + totalRowHtml;
+
+    refreshSelectionUI();
 }
 
 function toggleDetailsDesktop(id) {

@@ -79,13 +79,15 @@ try {
         // ບວກລັອດເຂົ້າກັນ ໃຫ້ເຫຼືອ 1 ແຖວຕໍ່ 1 ສິນຄ້າ ຄືກັບ popup ຂອງ admin
         // (exim/admin/fetch_product_sale_detail.php ໃຊ້ sum(qty) group by product_id)
         // ຖ້າບໍ່ບວກ ລູກຄ້າຈະເຫັນສິນຄ້າດຽວກັນຊ້ຳຫຼາຍແຖວ ຕາມຈຳນວນລັອດ
-        $sql = "SELECT SUM(product_sale.qty) as qty, product_sale.price,
-                SUM(product_sale.qty * product_sale.price) as amount,
+        $sql = "SELECT product_sale.qty as qty, product_sale.price,
+                (product_sale.qty * product_sale.price) as amount,
+                -- SUM(product_sale.qty * product_sale.price) as amount,
                 products.Product_Name, products.Unit
                 FROM product_sale
                 LEFT JOIN products ON products.Product_ID = product_sale.product_id
                 WHERE product_sale.sale_id = '$sale_id' AND $verify_where
-                GROUP BY product_sale.product_id";
+                -- GROUP BY product_sale.product_id
+                ";
                 
         $query = mysqli_query($con, $sql);
         if(!$query) {
